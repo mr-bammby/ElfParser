@@ -59,7 +59,7 @@ int16_t ElfParser_memCmp(const void *p1, const void *p2, size_t len)
 
 	if (!p1_p && !p2_p)
     {
-		return (0);
+		return (-1);
     }
     if (p1_p == p2_p)
     {
@@ -68,13 +68,37 @@ int16_t ElfParser_memCmp(const void *p1, const void *p2, size_t len)
 
 	while (i < len)
 	{
-		if (*p1_p == *p2_p)
+		if (*p1_p != *p2_p)
         {
             return(((int16_t)*p1_p) -  ((int16_t)*p2_p));
         }
 		p1_p++;
         p2_p++;
         i++;
+	}
+    
+	return (0);
+}
+
+int16_t ElfParser_strCmp(const char *s1, const char *s2)
+{
+	if (!s1 && !s2)
+    {
+		return (-1);
+    }
+    if (s1 == s2)
+    {
+        return (0);
+    }
+
+	while (*s1 != '\0')
+	{
+		if (*s1 != *s2)
+        {
+            return(((int16_t)*s1) -  ((int16_t)*s2));
+        }
+		s1++;
+        s2++;
 	}
     
 	return (0);

@@ -4,35 +4,32 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include "../inc_pub/elfparser_header.h"
-#include "../inc_pub/elfparser_strtable.h"
+
+#define ELFPARSER_SECTHEAD_TYPE_NULL      = 0x0u,
+#define ELFPARSER_SECTHEAD_TYPE_PROGBITS  = 0x01u,
+#define ELFPARSER_SECTHEAD_TYPE_SYMTAB    = 0x02u,
+#define ELFPARSER_SECTHEAD_TYPE_STRINGTAB = 0x03u,
+#define ELFPARSER_SECTHEAD_TYPE_RELA      = 0x04u,
+#define ELFPARSER_SECTHEAD_TYPE_HASH      = 0x05u,
+#define ELFPARSER_SECTHEAD_TYPE_DYNAMIC   = 0x06u,
+#define ELFPARSER_SECTHEAD_TYPE_NOTE      = 0x07u,
+#define ELFPARSER_SECTHEAD_TYPE_NOBITS    = 0x08u,
+#define ELFPARSER_SECTHEAD_TYPE_REL       = 0x09u,
+#define ELFPARSER_SECTHEAD_TYPE_SHLIB     = 0x0Au
 
 
-
-#define ELF_SECTHEAD_TYPE_NULL      = 0x0u,
-#define ELF_SECTHEAD_TYPE_PROGBITS  = 0x01u,
-#define ELF_SECTHEAD_TYPE_SYMTAB    = 0x02u,
-#define ELF_SECTHEAD_TYPE_STRINGTAB = 0x03u,
-#define ELF_SECTHEAD_TYPE_RELA      = 0x04u,
-#define ELF_SECTHEAD_TYPE_HASH      = 0x05u,
-#define ELF_SECTHEAD_TYPE_DYNAMIC   = 0x06u,
-#define ELF_SECTHEAD_TYPE_NOTE      = 0x07u,
-#define ELF_SECTHEAD_TYPE_NOBITS    = 0x08u,
-#define ELF_SECTHEAD_TYPE_REL       = 0x09u,
-#define ELF_SECTHEAD_TYPE_SHLIB     = 0x0Au
-
-
-#define ELF_SECTHEAD_FLAG_WTITE         0x00000001u
-#define ELF_SECTHEAD_FLAG_ALLOC         0x00000002u
-#define ELF_SECTHEAD_FLAG_EXECINST      0x00000004u
-#define ELF_SECTHEAD_FLAG_MERGE         0x00000010u
-#define ELF_SECTHEAD_FLAG_STRINGS       0x00000020u
-#define ELF_SECTHEAD_FLAG_INFO_LINK     0x00000040u
-#define ELF_SECTHEAD_FLAG_LINK_ORDER    0x00000080u
-#define ELF_SECTHEAD_FLAG_OS_NONCONFORM 0x00000100u
-#define ELF_SECTHEAD_FLAG_GROUP         0x00000200u
-#define ELF_SECTHEAD_FLAG_TLS           0x00000400u
-#define ELF_SECTHEAD_FLAG_MASK_OS       0x0ff00000u
-#define ELF_SECTHEAD_FLAG_MASK_PROC     0xf0000000u
+#define ELFPARSER_SECTHEAD_FLAG_WTITE         0x00000001u
+#define ELFPARSER_SECTHEAD_FLAG_ALLOC         0x00000002u
+#define ELFPARSER_SECTHEAD_FLAG_EXECINST      0x00000004u
+#define ELFPARSER_SECTHEAD_FLAG_MERGE         0x00000010u
+#define ELFPARSER_SECTHEAD_FLAG_STRINGS       0x00000020u
+#define ELFPARSER_SECTHEAD_FLAG_INFO_LINK     0x00000040u
+#define ELFPARSER_SECTHEAD_FLAG_LINK_ORDER    0x00000080u
+#define ELFPARSER_SECTHEAD_FLAG_OS_NONCONFORM 0x00000100u
+#define ELFPARSER_SECTHEAD_FLAG_GROUP         0x00000200u
+#define ELFPARSER_SECTHEAD_FLAG_TLS           0x00000400u
+#define ELFPARSER_SECTHEAD_FLAG_MASK_OS       0x0ff00000u
+#define ELFPARSER_SECTHEAD_FLAG_MASK_PROC     0xf0000000u
 
 typedef struct elfparser_secthead_entry_s
 {
@@ -64,5 +61,7 @@ int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head, const elfpar
 int ElfParser_SectHead_parse(elfparser_secthead_t *sect_head, const void *map, size_t map_size);
 int ElfParser_SectHead_nameResolve(const elfparser_secthead_t *sect_head, const void *map, size_t map_size);
 int ElfParser_SectHead_free(elfparser_secthead_t *sect_head);
+int32_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, const char *name, size_t start_idx);
+
 
 #endif /* _IG_ELFPARSER_SECTHEAD_H_ */

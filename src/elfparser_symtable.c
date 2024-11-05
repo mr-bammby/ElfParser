@@ -1,22 +1,28 @@
-#include "../inc_priv/elfparser_secthead_priv.h"
+#include "../inc_priv/elfparser_symtable_priv.h"
 #include "../inc_pub/elfparser_secthead.h"
 #include "../inc_priv/elfparser_memmanip_priv.h"
-#include "../inc_pub/elfparser_header.h"
+#include "../inc_pub/elfparser_symtable.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head,  const elfparser_header_t *header)
+int ElfParser_SymTable_structSetup(elfparser_symtable_t *symbol_table, const elfparser_secthead_entry_t *symbol_entry, const elfparser_secthead_t *sect_head, const elfparser_header_t *header )
 {
     int ret_val = 0;
+    int32_t temp;
 
-    sect_head->elf_class = header->elf_ident.elf_class;
-    sect_head->elf_data = header->elf_ident.elf_data;
-    sect_head->entry_size = header->elf_section_header_entry_size;
-    sect_head->table_len = header->elf_section_header_entry_num;
-    sect_head->string_table_idx = header->elf_section_header_name_idx;
-    sect_head->max_idx = 0;
-    sect_head->table = malloc(sect_head->table_len * sizeof(elfparser_secthead_entry_t));
-    if (sect_head->table == NULL)
+    symbol_table->elf_class = header->elf_ident.elf_class;
+    symbol_table->elf_data = header->elf_ident.elf_data;
+    symbol_table->entry_size = header->elf_section_header_entry_size;
+    symbol_table->table_len = header->elf_section_header_entry_num;
+    temp = ElfParser_SectHead_byNameFind(sect_head, SYMTABLE_STRING_SECT_NAME, 0);
+    if (temp < 0)
+    {
+        return(-2);
+    }
+    symbol_table->string_table_idx (uint16_t)temp;
+    symbol_table->max_idx = 0;
+    symbol_table->table = malloc(sect_head->table_len * sizeof(elfparser_symtable_entry_t));
+    if (symbol_table->table == NULL)
     {
         ret_val = -3;
     }
@@ -195,7 +201,7 @@ int ElfParser_SectHead_free(elfparser_secthead_t *sect_head)
     return(0);
 }
 
-int32_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, const char *name, size_t start_idx)
+int64_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, const char *name, size_t start_idx)
 {
     if((sect_head == NULL) || (name == NULL))
     {
@@ -209,7 +215,7 @@ int32_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, con
     {
         if (ElfParser_strCmp(sect_head->table->sh_name, name) == 0)
         {
-            return (cnt);
+            return(cnt);
         }
     }
     return(-1);
