@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include "../inc_pub/elfparser_header.h"
+#include "../inc_pub/elfparser_strtable.h"
 
 
 
@@ -55,11 +56,13 @@ typedef struct elfparser_secthead_s
     elfparser_header_data_e elf_data;
     uint16_t table_len;
     uint16_t entry_size;
-    uint16_t name_idx;
+    uint16_t string_table_idx;
+    uint32_t max_idx;
 } elfparser_secthead_t;
 
-int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head_p, const elfparser_header_t *header);
-int ElfParser_SectHead_parse(const elfparser_secthead_t *sect_head, const void *map, size_t map_size);
-int ElfParser_SectHead_nameResolve(elfparser_secthead_t sect_head, void *string_table); /* needs string table implementation to work */
+int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head, const elfparser_header_t *header);
+int ElfParser_SectHead_parse(elfparser_secthead_t *sect_head, const void *map, size_t map_size);
+int ElfParser_SectHead_nameResolve(const elfparser_secthead_t *sect_head, const void *map, size_t map_size);
+int ElfParser_SectHead_free(elfparser_secthead_t *sect_head);
 
 #endif /* _IG_ELFPARSER_SECTHEAD_H_ */

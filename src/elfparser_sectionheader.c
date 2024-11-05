@@ -3,6 +3,7 @@
 #include "../inc_priv/elfparser_memmanip_priv.h"
 #include "../inc_pub/elfparser_header.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head,  const elfparser_header_t *header)
 {
@@ -12,16 +13,17 @@ int ElfParser_SectHead_structSetup(elfparser_secthead_t *sect_head,  const elfpa
     sect_head->elf_data = header->elf_ident.elf_data;
     sect_head->entry_size = header->elf_section_header_entry_size;
     sect_head->table_len = header->elf_section_header_entry_num;
-    sect_head->name_idx = header->elf_section_header_name_idx;
+    sect_head->string_table_idx = header->elf_section_header_name_idx;
+    sect_head->max_idx = 0;
     sect_head->table = malloc(sect_head->table_len * sizeof(elfparser_secthead_entry_t));
     if (sect_head->table == NULL)
     {
-        ret_val = 0;
+        ret_val = -3;
     }
     return(ret_val);
 }
 
-int  ElfParser_SectHead_parse(const elfparser_secthead_t *sect_head, const void *map, size_t map_size)
+int  ElfParser_SectHead_parse(elfparser_secthead_t *sect_head, const void *map, size_t map_size)
 {
     int ret_val = 0;
     uint64_t* mem_off;
@@ -105,6 +107,7 @@ int  ElfParser_SectHead_parse(const elfparser_secthead_t *sect_head, const void 
     {
         for (uint32_t i = 0; i < sect_head->table_len; i++)
         {
+            sect_head->table[i].sh_name = NULL;
             sect_head->table[i].sh_name_idx = 0u;
             sect_head->table[i].sh_type = 0u;
             sect_head->table[i].sh_flags = 0u;
@@ -142,8 +145,53 @@ int  ElfParser_SectHead_parse(const elfparser_secthead_t *sect_head, const void 
                     ret_val = -4;
                 }
             }
+            if (sect_head->table[i].sh_name_idx > sect_head->max_idx)
+            {
+                sect_head->max_idx = sect_head->table[i].sh_name_idx;
+            }
         }
     }
 
     return (ret_val);
+}
+
+int ElfParser_SectHead_nameResolve(const elfparser_secthead_t *sect_head, const void *map, size_t map_size)
+{
+    int64_t temp;
+    int ret_val = 0;
+    const char *char_map = map;
+    
+    if ((map_size < sect_head->max_idx) && (char_map[map_size - 1] != '\0'))
+    {
+        ret_val = -1;
+    }
+    for (size_t cnt = 0; cnt < sect_head->table_len; cnt++)
+    {
+        printf("%ld\n", cnt);
+        temp = ElfParser_strDup(&char_map[sect_head->table[cnt].sh_name_idx], &(sect_head->table[cnt].sh_name));
+        if (temp < 0)
+        {
+            ret_val = -2;
+        }
+    }
+    return(ret_val);
+}
+
+
+int ElfParser_SectHead_free(elfparser_secthead_t *sect_head)
+{
+    if ((sect_head == NULL) || (sect_head->table == NULL))
+    {
+        return(-1);
+    }
+    for (size_t cnt = 0; cnt < sect_head->table_len; cnt++)
+    {
+        if (sect_head->table[cnt].sh_name != NULL)
+        {
+            free(sect_head->table[cnt].sh_name);
+        }
+    }
+    free(sect_head->table);
+    sect_head->table = NULL;
+    return(0);
 }

@@ -80,7 +80,7 @@ int16_t ElfParser_memCmp(const void *p1, const void *p2, size_t len)
 	return (0);
 }
 
-int64_t ElfParser_strDup(const void *map, char **dup, size_t start, size_t len)
+int64_t ElfParser_strExtract(const void *map, char **dup, size_t start, size_t len)
 {
     char *char_map = (char*)map;
     size_t cnt = start;
@@ -113,5 +113,30 @@ int64_t ElfParser_strDup(const void *map, char **dup, size_t start, size_t len)
         return(-4);
     }
     return(ret_val);
+}
 
+int64_t ElfParser_strDup(const char *str, char **dup)
+{
+    size_t cnt = 0;
+    int64_t ret_val = 0;
+
+    if(str == NULL)
+    {
+        return(-2);
+    }
+    while(str[cnt] != '\0')
+    {
+        cnt++;
+    }
+    ret_val = cnt + 1;
+    *dup = malloc(ret_val);
+    if (*dup == NULL)
+    {
+        return(-3);
+    }
+    if(ElfParser_memCpy(*dup, str, ret_val) == NULL)
+    {
+        return(-4);
+    }
+    return(ret_val);
 }
