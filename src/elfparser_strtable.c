@@ -4,7 +4,7 @@
 int ElfParser_StrTable_parse(elfparser_strtable_t *string_table, const void *map, size_t map_size)
 {
     char *map_char = (char *)map;
-    size_t cnt = 0;
+    int64_t cnt = 0;
     size_t start = 0;
     int64_t ret = 0;
 
