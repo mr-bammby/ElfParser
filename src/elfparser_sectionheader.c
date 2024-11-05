@@ -77,7 +77,7 @@ int  ElfParser_SectHead_parse(elfparser_secthead_t *sect_head, const void *map, 
                                     };
 
 
-    void *ret_dest[10];
+    void *ret_dest[SECTHEADER_ENTRY_LEN];
     
 
     if ((sect_head == NULL) || (map == NULL))
@@ -201,13 +201,13 @@ int32_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, con
     {
         return(-1);
     }
-    if((sect_head->table == NULL) || (sect_head->table_len >= start_idx))
+    if((sect_head->table == NULL) || (sect_head->table_len <= start_idx))
     {
-        return(-1);
+        return(-2);
     }
     for (size_t cnt = start_idx; cnt < sect_head->table_len; cnt++)
     {
-        if (ElfParser_strCmp(sect_head->table->sh_name, name) == 0)
+        if (ElfParser_strCmp(sect_head->table[cnt].sh_name, name) == 0)
         {
             return (cnt);
         }

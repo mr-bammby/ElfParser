@@ -63,5 +63,4 @@ int ElfParser_SectHead_nameResolve(const elfparser_secthead_t *sect_head, const 
 int ElfParser_SectHead_free(elfparser_secthead_t *sect_head);
 int32_t ElfParser_SectHead_byNameFind(elfparser_secthead_t const *sect_head, const char *name, size_t start_idx);
 
-
 #endif /* _IG_ELFPARSER_SECTHEAD_H_ */

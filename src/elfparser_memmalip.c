@@ -100,8 +100,7 @@ int16_t ElfParser_strCmp(const char *s1, const char *s2)
 		s1++;
         s2++;
 	}
-    
-	return (0);
+	return (((int16_t)*s1) -  ((int16_t)*s2));
 }
 
 int64_t ElfParser_strExtract(const void *map, char **dup, size_t start, size_t len)

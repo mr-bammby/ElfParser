@@ -40,6 +40,7 @@ typedef struct elfparser_symtable_entry_s
 {
     char* sym_name;
     uint32_t sym_name_idx; /* index of name in string table */
+    uint8_t sym_bind;
     uint8_t sym_type;
     uint8_t sym_visibility;
     uint16_t sym_sect_idx;
@@ -58,9 +59,11 @@ typedef struct elfparser_symtable_s
     uint32_t max_idx;
 } elfparser_symtable_t;
 
-int ElfParser_SymTable_structSetup(elfparser_symtable_t *symbol_table, const elfparser_secthead_t *sect_head, size_t symbol_table_sect_idx, const elfparser_header_t *header );
+int ElfParser_SymTable_structSetup(elfparser_symtable_t *symbol_table, const elfparser_secthead_t *sect_head, uint16_t symbol_table_sect_idx, const elfparser_header_t *header );
 int ElfParser_SymTable_parse(elfparser_symtable_t *symbol_table, const void *map, size_t map_size);
 int ElfParser_SymTable_nameResolve(const elfparser_symtable_t *symbol_table, const void *map, size_t map_size);
 int ElfParser_SymTable_free(elfparser_symtable_t *symbol_table);
+int32_t ElfParser_SymTable_byNameFind(elfparser_symtable_t const *symbol_table, const char *name, size_t start_idx);
+
 
 #endif /* _IG_ELFPARSER_SYMTABLE_H_ */
