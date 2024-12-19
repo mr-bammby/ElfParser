@@ -167,7 +167,6 @@ int ElfParser_SectHead_nameResolve(const elfparser_secthead_t *sect_head, const 
     }
     for (size_t cnt = 0; cnt < sect_head->table_len; cnt++)
     {
-        printf("%ld\n", cnt);
         temp = ElfParser_strDup(&char_map[sect_head->table[cnt].sh_name_idx], &(sect_head->table[cnt].sh_name));
         if (temp < 0)
         {
