@@ -35,18 +35,18 @@ int ElfParser_SymTable_parse(elfparser_symtable_t *symbol_table, const void *map
     uint64_t* mem_off;
     uint64_t* mem_size;
     uint64_t mem_off_32bit[] = {    SYMTABLE_ENTRY_NAMEIDX_OFF,
-                                    SYMTABLE_ENTRY_INFO_OFF,
-                                    SYMTABLE_ENTRY_OTHER_OFF,
-                                    SYMTABLE_ENTRY_SECTIDX_OFF,
-                                    SYMTABLE_ENTRY_VALUE_OFF,
+                                    SYMTABLE_ENTRY_INFO_OFF_32BIT,
+                                    SYMTABLE_ENTRY_OTHER_OFF_32BIT,
+                                    SYMTABLE_ENTRY_SECTIDX_OFF_32BIT,
+                                    SYMTABLE_ENTRY_VALUE_OFF_32BIT,
                                     SYMTABLE_ENTRY_SIZE_OFF_32BIT
                                     };
 
     uint64_t mem_off_64bit[] = {    SYMTABLE_ENTRY_NAMEIDX_OFF,
-                                    SYMTABLE_ENTRY_INFO_OFF,
-                                    SYMTABLE_ENTRY_OTHER_OFF,
-                                    SYMTABLE_ENTRY_SECTIDX_OFF,
-                                    SYMTABLE_ENTRY_VALUE_OFF,
+                                    SYMTABLE_ENTRY_INFO_OFF_64BIT,
+                                    SYMTABLE_ENTRY_OTHER_OFF_64BIT,
+                                    SYMTABLE_ENTRY_SECTIDX_OFF_64BIT,
+                                    SYMTABLE_ENTRY_VALUE_OFF_64BIT,
                                     SYMTABLE_ENTRY_SIZE_OFF_64BIT
                                     };
 
