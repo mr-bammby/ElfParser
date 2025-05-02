@@ -42,7 +42,7 @@ int ElfParser_SymTable_structSetup(elfparser_symtable_t *symbol_table, const elf
     symbol_table->elf_class = header->elf_ident.elf_class;  // Set ELF class
     symbol_table->elf_data = header->elf_ident.elf_data;    // Set endianness
     symbol_table->entry_size = sect_head->table[symbol_table_sect_idx].sh_entsize; // Size of each entry
-    symbol_table->table_len = sect_head->table[symbol_table_sect_idx].sh_size / symbol_table->entry_size; // Number of entries
+    symbol_table->table_len = ((uint64_t)sect_head->table[symbol_table_sect_idx].sh_size / (uint64_t)symbol_table->entry_size); // Number of entries
     int32_t temp = ElfParser_SectHead_byNameFind(sect_head, SYMTABLE_STRING_SECT_NAME, 0); // Find string table
     if (temp == ELFPARSER_ERR_NOT_FOUND)
     {

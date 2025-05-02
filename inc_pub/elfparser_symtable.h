@@ -78,10 +78,10 @@ typedef struct elfparser_symtable_s
     elfparser_symtable_entry_t* table;           /**< Array of symbol table entries */
     elfparser_header_class_e    elf_class;       /**< ELF class (32-bit or 64-bit) */
     elfparser_header_data_e     elf_data;        /**< Data encoding (endianness) */
-    uint16_t                    table_len;       /**< Number of entries in table */
+    uint64_t                    table_len;       /**< Number of entries in table */
     uint16_t                    entry_size;      /**< Size of each entry in bytes */
     uint16_t                    string_table_idx; /**< Index of string table section */
-    uint32_t                    max_idx;         /**< Maximum string table index encountered */
+    uint64_t                    max_idx;         /**< Maximum string table index encountered */
 } elfparser_symtable_t;
 
 /**
